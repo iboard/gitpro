@@ -1,5 +1,9 @@
 # gitpro
 
+[![Hex.pm](https://img.shields.io/hexpm/v/gitpro.svg)](https://hex.pm/packages/gitpro)
+[![Docs](https://img.shields.io/badge/hexdocs-docs-8e7ce6.svg)](https://hexdocs.pm/gitpro)
+[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+
 Browse a GitHub **project board** from the terminal, from inside the checkout it
 belongs to.
 
@@ -119,6 +123,14 @@ gh auth refresh -s project      # if 'project' is not already in gh auth status
 Then build the binary. It is an escript — one self-contained file that runs
 wherever it is called from:
 
+From Hex, which builds the escript and puts it on your PATH in one step:
+
+```sh
+mix escript.install hex gitpro
+```
+
+Or from source:
+
 ```sh
 git clone https://github.com/iboard/gitpro.git
 cd gitpro
@@ -126,6 +138,9 @@ mix deps.get
 mix escript.build         # ./gitpro
 mix escript.install       # ~/.mix/escripts/gitpro, put that on your PATH
 ```
+
+Either way the escript lands in `~/.mix/escripts`, so that wants to be on your
+`PATH`.
 
 `bin/gitpro` runs it from the source tree, rebuilding when the sources have
 changed — handy while working on it, and still correct about the directory it
@@ -175,6 +190,9 @@ without a token:
 ```sh
 mix test
 ```
+
+The API documentation is on [HexDocs](https://hexdocs.pm/gitpro), or `mix docs`
+builds it locally.
 
 ## Not yet
 
