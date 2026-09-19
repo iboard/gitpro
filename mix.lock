@@ -1,0 +1,3 @@
+%{
+  "atui": {:hex, :atui, "0.3.0", "09117c512316b8bbbd053e12ab84fc5b2d338bfc15a0f273738f8265068ca0fa", [:mix], [], "hexpm", "e9211796eab71f84d234c618d5a1e3e60fd64d5d21590e1ce6d1bff078abaea6"},
+}

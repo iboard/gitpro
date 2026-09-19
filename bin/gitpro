@@ -1,0 +1,17 @@
+#!/bin/sh
+# Run gitpro from the source tree, from wherever you are standing.
+#
+# It builds the escript when the sources are newer than it and then execs it,
+# so the working directory is the one you called it from — which is the whole
+# point of the tool. The +Bc the UI needs is in the escript's own header, put
+# there by `mix escript.build`; there is nothing to arrange here.
+set -e
+
+project="$(cd "$(dirname "$0")/.." && pwd)"
+escript="$project/gitpro"
+
+if [ ! -x "$escript" ] || [ -n "$(find "$project/lib" "$project/mix.exs" -newer "$escript" 2>/dev/null)" ]; then
+  (cd "$project" && mix escript.build >/dev/null)
+fi
+
+exec "$escript" "$@"
