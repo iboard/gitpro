@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0
+
+The first stable release. Everything in 0.1.0, and:
+
+* `^A` opens an **about popup**: what this is, which version of it, and the
+  links to GitHub, Hex and HexDocs. The links are a list you move through with
+  `↑` `↓` `j` `k`, and `⏎` opens the highlighted one in a browser.
+
+`^A` was readline's "start of the line" in the search field, which
+`Atui.TextInput` still binds; `Home` does that now.
+
 ## 0.1.0
 
 First release.

@@ -11,15 +11,19 @@ defmodule Gitpro.Views.Issues do
 
       ^I          the card in full          ^O ⏎   open the card in a browser
       ^F          the filter switches       ^R     reload the board
-      ↑ ↓ ^P ^N   move the selection        ESC    clear the search, then quit
-      PgUp PgDn   a screen at a time        ^C     quit
+      ^A          what this is              ESC    clear the search, then quit
+      ↑ ↓ ^P ^N   move the selection        ^C     quit
+      PgUp PgDn   a screen at a time
 
   `^I` is the byte the Tab key sends — a terminal cannot tell the two apart —
   so Tab opens the card too, and the switches moved to `^F` to make room.
 
   `q` is a letter, so here it goes into the search field like any other. In the
   popups, where there is nothing to type into, it closes — see
-  `Gitpro.Views.Detail` and `Gitpro.Views.Filters`.
+  `Gitpro.Views.Detail`, `Gitpro.Views.Filters` and `Gitpro.Views.About`.
+
+  `^A` is the one binding taken off the search field: `Atui.TextInput` has it as
+  readline's "start of the line", and `Home` still does that.
 
   ## Loading
 
@@ -48,7 +52,7 @@ defmodule Gitpro.Views.Issues do
 
   alias Atui.{Fetch, Layout, Style, Text, TextInput}
   alias Gitpro.{Browser, Filter, Github, Item, Window}
-  alias Gitpro.Views.{Detail, Filters}
+  alias Gitpro.Views.{About, Detail, Filters}
 
   @border Style.new(fg: :blue)
   @title Style.new(fg: :bright_blue, bold: true)
@@ -113,6 +117,12 @@ defmodule Gitpro.Views.Issues do
 
   def handle_key({[:ctrl], "f"}, state) do
     {:push, Filters, [filter: state.filter], assign(state, :popup?, true)}
+  end
+
+  # Bound before the search field is offered the key, which is what takes ^A off
+  # it; Home is the other half of what TextInput binds it to.
+  def handle_key({[:ctrl], "a"}, state) do
+    {:push, About, [], assign(state, :popup?, true)}
   end
 
   def handle_key(key, state) when key in [:up, {[:ctrl], "p"}], do: {:ok, move(state, -1)}
@@ -262,7 +272,8 @@ defmodule Gitpro.Views.Issues do
     flags = Filter.summary(state.filter)
 
     [
-      "^I details   ^O open   ^F filter   ^R reload   ESC quit" <> flag_suffix(flags),
+      "^I details   ^O open   ^F filter   ^R reload   ^A about   ESC quit" <>
+        flag_suffix(flags),
       "^I details   ^O open   ^F filter   ESC quit" <> flag_suffix(flags),
       "^I ^O ^F   ESC quit" <> flag_suffix(flags),
       "^F filter  ESC quit",

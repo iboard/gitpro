@@ -3,7 +3,7 @@ defmodule Gitpro.Views.IssuesTest do
 
   alias Atui.{Runtime, Screen}
   alias Gitpro.{Filter, Item}
-  alias Gitpro.Views.{Detail, Filters, Issues}
+  alias Gitpro.Views.{About, Detail, Filters, Issues}
 
   @board %{
     id: "PVT_1",
@@ -618,6 +618,50 @@ defmodule Gitpro.Views.IssuesTest do
       press(pid, :enter)
 
       assert text(pid) =~ "nothing to open"
+    end
+  end
+
+  describe "the about popup" do
+    test "^A opens it, with the version and the links in it" do
+      pid = start_ui() |> press({[:ctrl], "a"})
+
+      assert Runtime.view_stack(pid) == [About, Issues]
+      frame = text(pid)
+      assert frame =~ "about"
+      assert frame =~ "gitpro"
+      assert frame =~ Gitpro.version()
+      assert frame =~ "github.com/iboard/gitpro"
+      assert frame =~ "hex.pm/packages/gitpro"
+      assert frame =~ "GPL-3.0-or-later"
+    end
+
+    test "the list view claims nothing while it is up" do
+      pid = start_ui() |> press({[:ctrl], "a"}) |> type("login")
+
+      assert state(pid).filter.query == ""
+      assert Runtime.view_stack(pid) == [About, Issues]
+    end
+
+    test "ESC closes it and gives the search field the keyboard back" do
+      pid = start_ui() |> press({[:ctrl], "a"}) |> press(:esc) |> type("docs")
+
+      assert Runtime.view_stack(pid) == [Issues]
+      refute state(pid).popup?
+      assert shown(pid) == ~w(3)
+    end
+
+    test "^A takes the search field's start-of-line, which Home still does" do
+      pid = start_ui() |> type("login")
+      assert Runtime.view_state(pid, Issues).input.cursor == 5
+
+      press(pid, :home)
+      assert Runtime.view_state(pid, Issues).input.cursor == 0
+
+      # And ^A opens the popup rather than moving the cursor.
+      press(pid, :end)
+      press(pid, {[:ctrl], "a"})
+      assert Runtime.view_stack(pid) == [About, Issues]
+      assert Runtime.view_state(pid, Issues).input.cursor == 5
     end
   end
 

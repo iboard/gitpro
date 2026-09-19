@@ -43,13 +43,15 @@ not want.
 | `↑` `↓` `^P` `^N` | move the selection |
 | `PgUp` `PgDn` | a screen at a time |
 | `^R` | reload the board |
+| `^A` | what this is, and where the rest of it lives |
 | `ESC` | clear the search, then quit |
 | `^C` | quit |
 
 `^I` is the byte the Tab key sends — a terminal cannot tell the two apart — so
 Tab opens the card too. `q` is a letter, so in the list it goes into the search
 field like anything else; in the popups, where there is nothing to type into, it
-closes.
+closes. `^A` is the one binding taken off the search field — it is readline's
+"start of the line" there, and `Home` still does that.
 
 ### The card
 
@@ -171,6 +173,7 @@ once, point the dependency in `mix.exs` back at a local checkout:
 | `Gitpro.Views.Issues` | the list, the search field and the footer |
 | `Gitpro.Views.Filters` | the popup of on/off switches |
 | `Gitpro.Views.Detail` | the popup showing one card in full |
+| `Gitpro.Views.About` | the popup saying what this is |
 | `Gitpro.Window` | which row a list taller than its box starts at |
 
 Two things are deliberate:
